@@ -22,13 +22,13 @@ public class PolynomialArithmetic {
                     addPolynomials();
                     break;
                 case 3:
-                    System.out.println("to do...");
+                    System.out.println("to do..."); // TODO
                     break;
                 case 4:
-                    System.out.println("to do...");
+                    System.out.println("to do..."); // TODO
                     break;
                 case 5:
-                    System.out.println("to do...");
+                    System.out.println("to do..."); // TODO
                     break;
                 case 6:
                     System.out.println("Thank you for using this program.");

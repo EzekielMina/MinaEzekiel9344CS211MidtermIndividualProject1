@@ -25,6 +25,6 @@ public class Quotient {
     }
 
     public String toString() {
-        return (" Quotient: " + quotientP.toString() + " Remainder: " + remainderP.toString());
+        return (" Quotient: " + quotientP.toString() + " \nRemainder: " + remainderP.toString());
     }
 }

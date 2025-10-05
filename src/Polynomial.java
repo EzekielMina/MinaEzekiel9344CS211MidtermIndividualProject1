@@ -9,8 +9,7 @@ import java.util.LinkedList; // access the LinkedList class from package util
  * Template for a polynomial
  */
 public class Polynomial {
-    private LinkedList<Term> terms; // data member to reference a
-                                    // LinkedList representing a polynomial
+    private LinkedList<Term> terms; // data member to reference a LinkedList representing a polynomial
 
     /**
      * Constructs a LinkedList for Terms that is initially empty
@@ -31,6 +30,10 @@ public class Polynomial {
         boolean found = false;
         Term currTerm = null;
 
+        /**
+         * will search through the terms one by one
+         * at each term, it will get its degree
+         */
         for (ctr = 0; ctr < terms.size(); ctr++) { // size method of LinkedList is used
             currTerm = terms.get(ctr); // get method of LinkedList is used.
 
@@ -143,7 +146,7 @@ public class Polynomial {
             resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
         }
 
-        // Put missing statement here
+        // TODO Put missing statement here
 
         for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
             Term currentTerm = otherPolynomial.getTerms().get(ctr2);
@@ -174,7 +177,7 @@ public class Polynomial {
         Polynomial result = new Polynomial();
         LinkedList<Term> resultTerms= new LinkedList<Term>();
 
-        // to do
+        // TODO
 
         return result;
     }
@@ -200,7 +203,7 @@ public class Polynomial {
                 result.addTerm(new Term(pCoef, currentTerm1.getLiteral(), pDegree));
 
 
-                // Invoke appropriate method to add a term to product polynomial
+                // TODO Invoke appropriate method to add a term to product polynomial
 
 
             } // end of second for ( for ctr2)
@@ -259,7 +262,7 @@ public class Polynomial {
             remainder.addTerm(new Term(0, 'x', 0));
         }
 
-        result.setRemainderP(remainder); // Invoke appropriate method to set remainder member of quotient
+        result.setRemainderP(remainder); // TODO Invoke appropriate method to set remainder member of quotient
 
         return result;
     }

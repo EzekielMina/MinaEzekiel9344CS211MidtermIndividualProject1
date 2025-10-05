@@ -11,9 +11,9 @@ Date:
  * 2 is the degree
  */
 public class Term implements Comparable<Term> {
-    private double coefficient; //data member to hold numerical coefficient of a term
-    private int degree; // data member to hold the degree of a term
-    private char literal; // data member to hold the literal coefficient of a term
+    private double coefficient;     // data member to hold numerical coefficient of a term
+    private int degree;             // data member to hold the degree of a term
+    private char literal;           // data member to hold the literal coefficient of a term
 
     /**
      * Constructs a term with coefficient set to 0, degree set to 0 and literal set to x.
@@ -23,6 +23,7 @@ public class Term implements Comparable<Term> {
         degree = 0;
         literal = 'x';
     }
+
 
     /**
      * Constructs a term that sets the coefficient, literal and degree
@@ -43,10 +44,10 @@ public class Term implements Comparable<Term> {
     public void setCoefficient(double coef) {
         this.coefficient= coef;
     }
-
-
     // sample use
     // t.setCoefficient(3)
+
+
     /**
      * Sets the value of the literal coefficient of this term to the specified character literal
      */
@@ -90,20 +91,23 @@ public class Term implements Comparable<Term> {
 
 
     /**
-     Returns 0 if the degree of this term is equal to the degree of another term
-     else returns an integer that is greater than 0 if the degree of this term is
-     greater than the degree of another term else returns an integer that is lesser than
-     0 if the degree of this term is lower than the degree of another term.
+     * Return 0 if both degrees are equal
+     * Return 1 if degree is greater than the other degree
+     * Return -1 if degree is lesser than the other degree
      */
     @Override
     public int compareTo(Term another){
-        if (this.getDegree() == another.getDegree())
+        if (this.getDegree() == another.getDegree()) {
             return 0;
-        else
-        if (this.getDegree() > another.getDegree())
+        }
+
+        else if (this.getDegree() > another.getDegree()) {
             return -1;
-        else
+        }
+
+        else {
             return 1;
+        }
 
         //sample use
         // return this.toString().compareTo(another.toString());
@@ -118,25 +122,24 @@ public class Term implements Comparable<Term> {
 
 
     /**
-     Returns a string representation of the term
-     that follows a format with the example 3x^2
+     * Returns a string representation of the term that follows a format with the example 3x^2
      */
     @Override
     public String toString() {
         if (coefficient == 0 ) {
-            return "";
+            return ""; // -
         }
 
-        else if (coefficient==1 && degree == 1) {
-            return "" + literal;
+        else if (coefficient == 1 && degree == 1) {
+            return "" + literal; // x
         }
 
-        else if (coefficient==1 && degree != 1) {
-            return "" + literal + "^" + degree;
+        else if (coefficient == 1 && degree != 1) {
+            return "" + literal + "^" + degree; // x^2
         }
 
         else {
-            return (coefficient + literal + "^" + degree);
+            return (coefficient + literal + "^" + degree); // 3x^2
         }
     }
 }
