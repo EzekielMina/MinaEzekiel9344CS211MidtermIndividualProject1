@@ -33,6 +33,9 @@ public class Polynomial {
         /**
          * will search through the terms one by one
          * at each term, it will get its degree
+         * will store it in a linked list
+         * and order it by greatest degree to smallest degree
+         * if similar degrees are found, will combine both those terms
          */
         for (ctr = 0; ctr < terms.size(); ctr++) { // size method of LinkedList is used
             currTerm = terms.get(ctr); // get method of LinkedList is used.
@@ -131,8 +134,10 @@ public class Polynomial {
      1. Declare (let) result as a Polynomial that will eventually represent the sum polynomial
      2. Construct a new LinkedList of Term(i.e. resultTerms) that will eventually hold the Terms of the sum Polynomial
      3. Construct a copy of each term of this (first) Polynomial and add the constructed Term to the constructed LinkedList (resultTerms)
+
      4. Let resultTerms be the terms of result(i.e. the sum polynomial)
      5. For each (get each) term of the other polynomial, construct a copy of the term and assign such copy to sTerm.
+
      6. Add sTerm to the sum polynomial (result)
      7. If result polynomial has no term, let result have the term 0x^0
      8. return result.
@@ -141,12 +146,14 @@ public class Polynomial {
         Polynomial result = new Polynomial();
         LinkedList<Term> resultTerms= new LinkedList<Term>();
 
+        // constructs a copy of each term, and adds it tto the linked list that will hold the terms
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm = this.getTerms().get(ctr);
             resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
         }
 
-        // TODO Put missing statement here
+        // TODO Put missing statement here (4-5)
+
 
         for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
             Term currentTerm = otherPolynomial.getTerms().get(ctr2);
@@ -166,9 +173,11 @@ public class Polynomial {
      1. Declare (let) result as a Polynomial that will eventually represent the difference polynomial
      2. Construct a new LinkedList of Term(i.e. resultTerms) that will eventually hold the Terms of the difference Polynomial
      3. Construct a copy of each term of this (first) Polynomial and put the constructed Term to the constructed LinkedList (resultTerms)
+
      4. Let resultTerms be the terms of result(i.e. the sum polynomial)
      5. For each (get each) term of the other polynomial, construct a copy of the term and assign such copy to sTerm.
      6. Multiply the numerical coefficient field of sTerm by -1.
+
      7. Add sTerm to the difference polynomial (result)
      8. If result polynomial has no term, let result have the term 0x^0
      9. return result.
@@ -177,7 +186,22 @@ public class Polynomial {
         Polynomial result = new Polynomial();
         LinkedList<Term> resultTerms= new LinkedList<Term>();
 
+        for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
+            Term currentTerm = this.getTerms().get(ctr);
+            resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
+        }
+
         // TODO
+
+        for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
+            Term currentTerm = otherPolynomial.getTerms().get(ctr2);
+            Term dTerm = new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree());
+            result.addTerm(dTerm);
+        }
+
+        if (result.getTerms().size()==0) {
+            result.addTerm(new Term(0,'x',0));
+        }
 
         return result;
     }
@@ -189,18 +213,18 @@ public class Polynomial {
      */
     public Polynomial multiply(Polynomial otherPolynomial) throws Exception
     {
-        Polynomial result=new Polynomial();
+        Polynomial result = new Polynomial();
 
-        for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
+        for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {                                // create a first round copy of all terms
             Term currentTerm1 = this.getTerms().get(ctr);
 
-            for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
+            for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {              // create a second round copy of all terms
                 Term currentTerm2 = otherPolynomial.getTerms().get(ctr2);
 
-                double pCoef = currentTerm2.getCoefficient()*currentTerm1.getCoefficient();
-                int pDegree = currentTerm2.getDegree()+currentTerm1.getDegree();
+                double pCoef = currentTerm2.getCoefficient() * currentTerm1.getCoefficient();   // get new product coefficient by multiplying
+                int pDegree = currentTerm2.getDegree() + currentTerm1.getDegree();              // get new product degree by adding them
 
-                result.addTerm(new Term(pCoef, currentTerm1.getLiteral(), pDegree));
+                result.addTerm(new Term(pCoef, currentTerm1.getLiteral(), pDegree));            // adds term to the linked list
 
 
                 // TODO Invoke appropriate method to add a term to product polynomial
@@ -208,8 +232,10 @@ public class Polynomial {
 
             } // end of second for ( for ctr2)
         } // end of first for (for ctr)
-        if (result.getTerms().size() == 0)
-            result.addTerm(new Term(0,'x',0));
+
+        if (result.getTerms().size() == 0) {
+            result.addTerm(new Term(0, 'x', 0));
+        }
         return result;
     }
 
