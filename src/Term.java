@@ -147,20 +147,38 @@ public class Term implements Comparable<Term> {
      */
     @Override
     public String toString() {
-        if (coefficient == 0 ) {
-            return ""; // -
+        // Skip printing if coefficient is zero
+        if (coefficient == 0) {
+            return "";
         }
 
-        else if (coefficient == 1 && degree == 1) {
-            return "" + literal; // x
+        StringBuilder s = new StringBuilder();
+
+        // Handle the sign
+        if (coefficient < 0) {
+            s.append("-");
         }
 
-        else if (coefficient == 1 && degree != 1) {
-            return "" + literal + "^" + degree; // x^2
+        double absCoef = Math.abs(coefficient);
+
+        // Show coefficient only if it's not 1 or if it's a constant term
+        if (!(absCoef == 1 && degree != 0)) {
+            // Remove .0 if not needed
+            if (absCoef == (int) absCoef) {
+                s.append((int) absCoef);
+            } else {
+                s.append(absCoef);
+            }
         }
 
-        else {
-            return (coefficient + literal + "^" + degree); // 3x^2
+        // Show literal and degree
+        if (degree > 0) {
+            s.append(literal);
+            if (degree > 1) {
+                s.append("^").append(degree);
+            }
         }
+
+        return s.toString().trim();
     }
 }

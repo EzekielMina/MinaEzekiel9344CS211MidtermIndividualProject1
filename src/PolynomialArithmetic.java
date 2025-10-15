@@ -5,21 +5,22 @@ Due Date: 15 October 2025
 
 import java.util.*;
 
+
 public class PolynomialArithmetic {
     Scanner keyboard = new Scanner(System.in);
 
     /**
-     * Start the program
+     * Starts the program and displays a menu until the user chooses to quit.
      *
-     * @throws Exception
+     * @throws Exception if an error occurs during input or computation
      */
     public void run() throws Exception {
         byte choice = 0;
-        while ( choice != 6 ) {
+        while (choice != 6) {
             showMenu();
             choice = readChoice((byte) 1, (byte) 6);
 
-            switch (choice){
+            switch (choice) {
                 case 1:
                     evaluatePolynomial();
                     break;
@@ -36,39 +37,39 @@ public class PolynomialArithmetic {
                     dividePolynomials();
                     break;
                 case 6:
-                    System.out.println("Thank you for using this program.");
-            } // end of switch
-        } // end of while
-    } // end of run
-
+                    System.out.println(AnsiStyle.style("Thank You.", AnsiStyle.BRIGHT_GREEN));
+                    break;
+            }
+        }
+    }
 
     /**
-     * Ask the user to pick a number between low and high, then return it.
+     * Reads a menu choice between a low and high number.
      *
-     * @param low the smallest allowed choice
-     * @param high the largest allowed choice
-     * @return the chosen number as a byte
+     * @param low  the smallest valid number
+     * @param high the largest valid number
+     * @return the user's choice as a byte
      * @throws Exception
      */
-    private byte readChoice(byte low, byte high) throws Exception{
-        byte choice = 0;
-        System.out.print("Enter your choice<"+ low + "... " + high + ">: ");
+    private byte readChoice(byte low, byte high) throws Exception {
+        byte choice;
+        System.out.print(AnsiStyle.style("Enter your choice (" + low + "-" + high + "): ", AnsiStyle.BRIGHT_YELLOW));
         choice = (byte) readInteger(low, high);
         return choice;
     }
 
     /**
-     * Displays sthe Menu of the Program
+     * Displays the main menu of the program
      */
     public void showMenu() {
-        System.out.println("-----------------------MENU--------------------------");
-        System.out.println("1. Evaluate a polynomial");
-        System.out.println("2. Add two polynomials");
-        System.out.println("3. Subtract a polynomial from another polynomial");
-        System.out.println("4. Multiply two polynomials");
-        System.out.println("5. Divide a polynomial by another polynomial");
-        System.out.println("6. Quit");
-        System.out.println("--------------------------------------------------------");
+        System.out.println(AnsiStyle.style("\n==================== POLYNOMIAL MENU ====================", AnsiStyle.BRIGHT_CYAN));
+        System.out.println(AnsiStyle.style("1. Evaluate a polynomial", AnsiStyle.BRIGHT_WHITE));
+        System.out.println(AnsiStyle.style("2. Add two polynomials", AnsiStyle.BRIGHT_WHITE));
+        System.out.println(AnsiStyle.style("3. Subtract a polynomial from another", AnsiStyle.BRIGHT_WHITE));
+        System.out.println(AnsiStyle.style("4. Multiply two polynomials", AnsiStyle.BRIGHT_WHITE));
+        System.out.println(AnsiStyle.style("5. Divide a polynomial by another", AnsiStyle.BRIGHT_WHITE));
+        System.out.println(AnsiStyle.style("6. Quit", AnsiStyle.BRIGHT_WHITE));
+        System.out.println(AnsiStyle.style("=========================================================", AnsiStyle.BRIGHT_CYAN));
     }
 
     /**
@@ -77,65 +78,65 @@ public class PolynomialArithmetic {
      *
      * @throws Exception if reading or evaluating fails
      */
-    public void evaluatePolynomial() throws Exception{
-        System.out.println("You want to evaluate a polynomial.");
+    public void evaluatePolynomial() throws Exception {
+        System.out.println(AnsiStyle.style("\nYou want to evaluate a polynomial.", AnsiStyle.BOLD));
         Polynomial p = readPolynomial();
-        System.out.println("The polynomial entered is " + p.toString());
 
-        System.out.print("What is the value to be assigned to variable of the polynomial? ");
-        double value= readDouble();
+        System.out.println(AnsiStyle.style("\nThe polynomial entered is: ", AnsiStyle.BRIGHT_CYAN) + AnsiStyle.style(p.toString(), AnsiStyle.BRIGHT_WHITE));
 
-        System.out.println("The polynomial evaluates to : "+ p.evaluate(value));
-        System.out.println("Press enter to continue.....");
+        System.out.print(AnsiStyle.style("\nWhat is the value to be assigned to the variable of the polynomial? ", AnsiStyle.BRIGHT_YELLOW));
+        double value = readDouble();
 
+        double result = p.evaluate(value);
+
+        System.out.println(AnsiStyle.style("\nThe polynomial evaluates to: ", AnsiStyle.BRIGHT_GREEN) + AnsiStyle.style(String.valueOf(result), AnsiStyle.BRIGHT_WHITE));
+
+        System.out.println(AnsiStyle.style("\nPress enter to continue.....", AnsiStyle.BRIGHT_BLACK));
         keyboard.nextLine();
     }
 
     /**
-     * Read and return an integer from the user between low and high.
-     * Keeps asking until the user gives a valid number.
+     * Reads and validates an integer between low and high.
      *
-     * @param low the minimum number allowed
-     * @param high the maximum number allowed
-     * @return the integer entered by the user
+     * @param low  minimum allowed number
+     * @param high maximum allowed number
+     * @return a valid integer within range
      */
-    private int readInteger(int low, int high){
+    private int readInteger(int low, int high) {
         boolean validInput = false;
-        int value=0;
+        int value = 0;
 
-        while (!validInput){
-            try{
+        while (!validInput) {
+            try {
                 value = Integer.parseInt(keyboard.nextLine());
-                if ( value < low){
-                    System.out.print("The number must not be lower than "+ low + ". ");
-                }
-                else if ( value > high){
-                    System.out.print("The number must not be greater than "+ high +". ");
+                if (value < low) {
+                    System.out.print("The number must not be lower than " + low + ". ");
+                } else if (value > high) {
+                    System.out.print("The number must not be greater than " + high + ". ");
                 } else {
                     validInput = true;
                 }
-            } catch (Exception x){
-                System.out.println("You have to enter an integer from " + low + " to " + high + ".");
+            } catch (Exception x) {
+                System.out.println("Please enter an integer.");
             }
         }
         return value;
     }
 
     /**
-     * Read and return a number with decimal from the user.
-     * Keeps asking until the user gives a valid number.
+     * Reads and validates a double from user input.
      *
-     * @return the number entered by the user
+     * @return the double value entered
      */
-    private double readDouble(){
+    private double readDouble() {
         boolean validInput = false;
-        double value=0;
+        double value = 0;
 
-        while (!validInput){
-            try{
+        while (!validInput) {
+            try {
                 value = Double.parseDouble(keyboard.nextLine());
                 validInput = true;
-            } catch (Exception x){
+            } catch (Exception x) {
                 System.out.println("You have to enter a number.");
             }
         }
@@ -143,32 +144,31 @@ public class PolynomialArithmetic {
     }
 
     /**
-     * Ask the user for the variable letter, degree, and coefficients,
-     * then build and return a Polynomial object.
+     * Builds and returns a polynomial based on user input.
      *
-     * @return a polynomial built from the user's answers
+     * @return the entered polynomial
      * @throws Exception
      */
-    public Polynomial readPolynomial() throws Exception{
+    public Polynomial readPolynomial() throws Exception {
         Polynomial p = new Polynomial();
-        int degree=-1;
+        int degree = -1;
         boolean validDegree = false;
         char literalCoefficient = 'x';
 
-        System.out.println("The polynomial should involve one variable/literal only.");
+        System.out.println(AnsiStyle.style("\nThe polynomial should involve one variable/literal only.", AnsiStyle.BRIGHT_BLACK));
 
         do {
-            System.out.print("What is the literal coefficient of the polynomial in one variable? ");
+            System.out.print(AnsiStyle.style("What is the literal coefficient of the polynomial? ", AnsiStyle.BRIGHT_YELLOW));
             literalCoefficient = keyboard.nextLine().charAt(0);
         } while (!Character.isAlphabetic(literalCoefficient));
 
         do {
-            System.out.print("What is the degree of the polynomial? ");
-            degree = readInteger(Integer.MIN_VALUE,Integer.MAX_VALUE);
+            System.out.print(AnsiStyle.style("What is the degree of the polynomial? ", AnsiStyle.BRIGHT_YELLOW));
+            degree = readInteger(Integer.MIN_VALUE, Integer.MAX_VALUE);
             validDegree = true;
         } while (!validDegree);
 
-        for (int x=degree; x>=0; x=x-1){
+        for (int x = degree; x >= 0; x--) {
             Term term = readTerm(literalCoefficient, x);
             p.addTerm(term);
         }
@@ -177,143 +177,137 @@ public class PolynomialArithmetic {
     }
 
     /**
-     * Ask the user for the coefficient of a single term and return it as a Term object.
+     * Reads a term’s coefficient and creates a Term object.
      *
-     * @param literal the letter used for the variable
-     * @param degree the degree of the term
-     * @return a Term object with the number the user entered
+     * @param literal the literal variable of the polynomial
+     * @param degree  the degree of the term
+     * @return a new Term object
      * @throws Exception
      */
-    public Term readTerm(char literal, int degree)throws Exception{
-        double nCoeff = 0;
-        System.out.print("Enter the numerical coefficient of the term with degree " + degree +": ");
-        nCoeff = readDouble();
-        Term term = new Term(nCoeff, literal, degree);
-        return term;
+    public Term readTerm(char literal, int degree) throws Exception {
+        System.out.print(AnsiStyle.style("Enter the numerical coefficient of the term with degree " + degree + ": ", AnsiStyle.BRIGHT_YELLOW));
+        double nCoeff = readDouble();
+        return new Term(nCoeff, literal, degree);
     }
 
     /**
-     * Let the user enter two polynomials and print their sum.
+     * Lets the user add two polynomials.
      *
      * @throws Exception
      */
     public void addPolynomials() throws Exception {
-        System.out.println("You want to add two polynomials.");
-        System.out.println("Enter the first polynomial.");
+        System.out.println(AnsiStyle.style("\nYou want to add two polynomials.", AnsiStyle.BOLD));
+        System.out.println(AnsiStyle.style("Enter the first polynomial.", AnsiStyle.BRIGHT_WHITE));
         Polynomial p1 = readPolynomial();
 
-        System.out.println("Enter the second polynomial.");
-        System.out.println("Note that the second variable should have the same variable/literal as the first polynomial.");
+        System.out.println(AnsiStyle.style("\nEnter the second polynomial.", AnsiStyle.BRIGHT_WHITE));
         Polynomial p2 = readPolynomial();
 
-        System.out.println("First polynomial : " + p1.toString());
-        System.out.println("Second polynomial : " + p2.toString());
+        System.out.println(AnsiStyle.style("\nFirst polynomial: ", AnsiStyle.BRIGHT_CYAN) + p1);
+        System.out.println(AnsiStyle.style("Second polynomial: ", AnsiStyle.BRIGHT_CYAN) + p2);
 
         if (p1.getTerms().get(0).getLiteral() == p2.getTerms().get(0).getLiteral()) {
-            System.out.println("Sum of the polynomials : " + p1.add(p2));
+            System.out.println(AnsiStyle.style("Sum: ", AnsiStyle.BRIGHT_GREEN) + p1.add(p2));
         } else {
-            System.out.println("The two polynomials cannot be added because they have different literals.");
+            System.out.println(AnsiStyle.style("The two polynomials have different literals.", AnsiStyle.BRIGHT_RED));
         }
 
-        System.out.println("Press enter to continue.....");
+        System.out.println(AnsiStyle.style("\nPress enter to continue.....", AnsiStyle.BRIGHT_BLACK));
         keyboard.nextLine();
     }
 
     /**
-     * Let the user enter two polynomials and print their difference (first - second).
+     * Lets the user subtract two polynomials.
      *
      * @throws Exception
      */
     public void subtractPolynomials() throws Exception {
-        System.out.println("You want to subtract two polynomials.");
-        System.out.println("Enter the minuend polynomial (the polynomial to be subtracted from).");
+        System.out.println(AnsiStyle.style("\nYou want to subtract two polynomials.", AnsiStyle.BOLD));
+        System.out.println("Enter the minuend polynomial.");
         Polynomial p1 = readPolynomial();
 
-        System.out.println("Enter the subtrahend polynomial (the polynomial to subtract).");
-        System.out.println("Note that the second variable should have the same variable/literal as the first polynomial.");
+        System.out.println("Enter the subtrahend polynomial.");
         Polynomial p2 = readPolynomial();
 
-        System.out.println("Minuend polynomial : " + p1.toString());
-        System.out.println("Subtrahend polynomial : " + p2.toString());
+        System.out.println(AnsiStyle.style("\nMinuend polynomial: ", AnsiStyle.BRIGHT_CYAN) + p1);
+        System.out.println(AnsiStyle.style("Subtrahend polynomial: ", AnsiStyle.BRIGHT_CYAN) + p2);
 
         if (p1.getTerms().get(0).getLiteral() == p2.getTerms().get(0).getLiteral()) {
-            System.out.println("Difference of the polynomials : " + p1.subtract(p2));
+            System.out.println(AnsiStyle.style("Difference: ", AnsiStyle.BRIGHT_GREEN) + p1.subtract(p2));
         } else {
-            System.out.println("The two polynomials cannot be subtracted because they have different literals.");
+            System.out.println(AnsiStyle.style("The two polynomials have different literals.", AnsiStyle.BRIGHT_RED));
         }
 
-        System.out.println("Press enter to continue.....");
+        System.out.println(AnsiStyle.style("\nPress enter to continue.....", AnsiStyle.BRIGHT_BLACK));
         keyboard.nextLine();
     }
 
     /**
-     * Let the user enter two polynomials and print their product.
+     * Lets the user multiply two polynomials.
      *
      * @throws Exception
      */
     public void multiplyPolynomials() throws Exception {
-        System.out.println("You want to multiply two polynomials.");
+        System.out.println(AnsiStyle.style("\nYou want to multiply two polynomials.", AnsiStyle.BOLD));
         System.out.println("Enter the first polynomial.");
         Polynomial p1 = readPolynomial();
 
         System.out.println("Enter the second polynomial.");
-        System.out.println("Note that the second variable should have the same variable/literal as the first polynomial.");
         Polynomial p2 = readPolynomial();
 
-        System.out.println("First polynomial : " + p1.toString());
-        System.out.println("Second polynomial : " + p2.toString());
+        System.out.println(AnsiStyle.style("\nFirst polynomial: ", AnsiStyle.BRIGHT_CYAN) + p1);
+        System.out.println(AnsiStyle.style("Second polynomial: ", AnsiStyle.BRIGHT_CYAN) + p2);
 
         if (p1.getTerms().get(0).getLiteral() == p2.getTerms().get(0).getLiteral()) {
-            System.out.println("Product of the polynomials : " + p1.multiply(p2));
+            System.out.println(AnsiStyle.style("Product: ", AnsiStyle.BRIGHT_GREEN) + p1.multiply(p2));
         } else {
-            System.out.println("The two polynomials cannot be multiplied because they have different literals.");
+            System.out.println(AnsiStyle.style("The two polynomials have different literals.", AnsiStyle.BRIGHT_RED));
         }
 
-        System.out.println("Press enter to continue.....");
+        System.out.println(AnsiStyle.style("\nPress enter to continue.....", AnsiStyle.BRIGHT_BLACK));
         keyboard.nextLine();
     }
 
     /**
-     * Let the user enter a dividend and a divisor, then print the quotient and remainder.
-     * If the divisor is zero or the variables differ, show an error message.
+     * Lets the user divide two polynomials and shows the quotient and remainder.
      *
      * @throws Exception
      */
     public void dividePolynomials() throws Exception {
-        System.out.println("You want to divide two polynomials.");
-        System.out.println("Enter the dividend polynomial (the polynomial to be divided).");
+        System.out.println(AnsiStyle.style("\nYou want to divide two polynomials.", AnsiStyle.BOLD));
+        System.out.println("Enter the dividend polynomial.");
         Polynomial p1 = readPolynomial();
 
-        System.out.println("Enter the divisor polynomial (the polynomial to divide by).");
-        System.out.println("Note that the divisor variable should have the same variable/literal as the dividend.");
+        System.out.println("Enter the divisor polynomial.");
         Polynomial p2 = readPolynomial();
 
-        System.out.println("Dividend polynomial : " + p1.toString());
-        System.out.println("Divisor polynomial : " + p2.toString());
+        System.out.println(AnsiStyle.style("\nDividend: ", AnsiStyle.BRIGHT_CYAN) + p1);
+        System.out.println(AnsiStyle.style("Divisor: ", AnsiStyle.BRIGHT_CYAN) + p2);
 
-        // Check divisor is not zero polynomial
         boolean divisorIsZero = false;
-        if (p2.getTerms() == null || p2.getTerms().size() == 0) divisorIsZero = true;
-        else if (p2.getTerms().size() == 1 && p2.getTerms().get(0).getCoefficient() == 0) divisorIsZero = true;
+        if (p2.getTerms() == null || p2.getTerms().size() == 0)
+            divisorIsZero = true;
+        else if (p2.getTerms().size() == 1 && p2.getTerms().get(0).getCoefficient() == 0)
+            divisorIsZero = true;
 
         if (!divisorIsZero && p1.getTerms().get(0).getLiteral() == p2.getTerms().get(0).getLiteral()) {
             Quotient q = p1.divide(p2);
-            System.out.println("Quotient: " + q.getQuotientP().toString());
-            System.out.println("Remainder: " + q.getRemainderP().toString());
+            System.out.println(AnsiStyle.style("Quotient: ", AnsiStyle.BRIGHT_GREEN) + q.getQuotientP());
+            System.out.println(AnsiStyle.style("Remainder: ", AnsiStyle.BRIGHT_YELLOW) + q.getRemainderP());
         } else if (divisorIsZero) {
-            System.out.println("Division by zero polynomial is undefined. Please enter a non-zero divisor.");
+            System.out.println(AnsiStyle.style("Division by zero polynomial is undefined.", AnsiStyle.BRIGHT_RED));
         } else {
-            System.out.println("The two polynomials cannot be divided because they have different literals.");
+            System.out.println(AnsiStyle.style("The two polynomials have different literals.", AnsiStyle.BRIGHT_RED));
         }
 
-        System.out.println("Press enter to continue.....");
+        System.out.println(AnsiStyle.style("\nPress enter to continue.....", AnsiStyle.BRIGHT_BLACK));
         keyboard.nextLine();
     }
 
     /**
-     * Start the program.
+     * Main method
      *
-     * @param args unused
+     * @param args
      */
     public static void main(String[] args) {
         PolynomialArithmetic program;
@@ -324,5 +318,5 @@ public class PolynomialArithmetic {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    } // end of main
-} // end of PolynomialArithmetic class
+    }
+}
