@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"AnsiStyle"},{"p":"<Unnamed>","l":"Polynomial"},{"p":"<Unnamed>","l":"PolynomialArithmetic"},{"p":"<Unnamed>","l":"Quotient"},{"p":"<Unnamed>","l":"Term"},{"p":"<Unnamed>","l":"TestPolynomial"}];updateSearchResults();
