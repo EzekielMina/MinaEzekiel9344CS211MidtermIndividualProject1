@@ -28,6 +28,10 @@ public class Term implements Comparable<Term> {
     /**
      * Constructs a term that sets the coefficient, literal and degree
      * to the given the coef, literal and degree
+     *
+     * @param coef the number part of the term
+     * @param literal the variable or letter (like x)
+     * @param degree the exponent of the literal
      */
     public Term(double coef, char literal, int degree) {
         this.coefficient = coef;
@@ -40,6 +44,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Sets the value of the numerical coefficient of this term to the specified coef
+     *
+     * @param coef the new coefficient value
      */
     public void setCoefficient(double coef) {
         this.coefficient= coef;
@@ -50,6 +56,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Sets the value of the literal coefficient of this term to the specified character literal
+     *
+     * @param literal the new literal character (like x or y)
      */
     public void setLiteral(char literal){
         this.literal = literal;
@@ -59,6 +67,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Sets the value of the degree of this term to a specified degree
+     *
+     * @param degree the new degree value
      */
     public void setDegree(int degree) {
         this.degree = degree;
@@ -67,6 +77,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Returns the numerical coefficient of this term
+     *
+     * @return the coefficient value
      */
     public double getCoefficient() {
         return this.coefficient;
@@ -76,6 +88,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Returns the literal coefficient of this term
+     *
+     * @return the literal character (like x)
      */
     public char getLiteral() {
         return this.literal;
@@ -84,6 +98,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Returns the degree of this term
+     *
+     * @return the degree value
      */
     public int getDegree() {
         return this.degree;
@@ -94,6 +110,9 @@ public class Term implements Comparable<Term> {
      * Return 0 if both degrees are equal
      * Return 1 if degree is greater than the other degree
      * Return -1 if degree is lesser than the other degree
+     *
+     * @param another another term to compare to
+     * @return an integer result of the comparison (-1, 0, or 1)
      */
     @Override
     public int compareTo(Term another){
@@ -123,6 +142,8 @@ public class Term implements Comparable<Term> {
 
     /**
      * Returns a string representation of the term that follows a format with the example 3x^2
+     *
+     * @return a string that shows the term
      */
     @Override
     public String toString() {

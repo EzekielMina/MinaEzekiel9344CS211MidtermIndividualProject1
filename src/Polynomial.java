@@ -5,37 +5,34 @@ Due Date: 15 October 2025
 
 import java.util.LinkedList; // access the LinkedList class from package util
 
-/**
- * Template for a polynomial
- */
 public class Polynomial {
-    private LinkedList<Term> terms; // data member to reference a LinkedList representing a polynomial
+    private LinkedList<Term> terms; // list of terms that make up the polynomial
 
     /**
-     * Constructs a LinkedList for Terms that is initially empty
+     * Creates an empty polynomial with no terms yet.
+     *
+     * @throws Exception if the list cannot be created
      */
-    public Polynomial() throws Exception{
+    public Polynomial() throws Exception {
         terms = new LinkedList<Term>();
     }
 
     /**
-     * Adds a Term to the polynomial such that the terms are arranged following a decreasing order of degrees.
-     * This method inserts a Term in the polynomial at the appropriate location if the degree of the term is not equal to a degree of an existing Term.
+     * Adds a new term into this polynomial.
+     * The terms are kept in decreasing order of degrees.
+     * If a term with the same degree already exists, their coefficients are added.
+     * If the new coefficient becomes zero, that term is removed.
      *
-     * If the degree of the Term is equal to a degree of an existing Term, the coefficient of the existing Term is
-     * updated by adding the coefficient of the Term being added. If the updated coefficient equals zero, the Term is removed from the polynomial.
+     * @param newTerm the term to add
+     * @throws Exception if adding to the list fails
      */
     public void addTerm(Term newTerm) throws Exception {
         int ctr;
         boolean found = false;
         Term currTerm = null;
 
-        /**
-         * will search through the terms one by one
-         * at each term, it will get its degree
-         */
-        for (ctr = 0; ctr < terms.size(); ctr++) { // size method of LinkedList is used
-            currTerm = terms.get(ctr); // get method of LinkedList is used.
+        for (ctr = 0; ctr < terms.size(); ctr++) {
+            currTerm = terms.get(ctr);
 
             if (currTerm.getDegree() <= newTerm.getDegree()) {
                 found = true;
@@ -44,63 +41,81 @@ public class Polynomial {
         }
 
         if (!found) {
-            terms.add(newTerm); // add method of LinkedList is used.
+            terms.add(newTerm);
         } else {
             if (currTerm.getDegree() < newTerm.getDegree()) {
-                terms.add(ctr, newTerm); // alternative add method of LinkedList is used
+                terms.add(ctr, newTerm);
             } else {
                 currTerm.setCoefficient(currTerm.getCoefficient() + newTerm.getCoefficient());
 
                 if (currTerm.getCoefficient() == 0) {
-                    terms.remove(ctr); // remove method of the LinkList class is used
+                    terms.remove(ctr);
                 }
             }
         }
     }
 
     /**
-     * Returns a string representing this polynomial with the following sample form 3x^2 - 5X + 3
+     * Turns this polynomial into a string.
+     * For example: 3x^2 - 5x + 3
+     *
+     * @return the polynomial written as a string
      */
     public String toString() {
-        String s = "";
-
-        if (terms == null) {
-            return " ";
+        if (terms == null || terms.isEmpty()) {
+            return "0";
         }
 
-        for (int ctr = 0; ctr < terms.size(); ctr++) {
-            Term currTerm = terms.get(ctr);
+        StringBuilder s = new StringBuilder();
 
-            if (currTerm.getCoefficient() > 0) {
-                if (ctr != 0) {
-                    s = s + " +";
-                }
+        for (int i = 0; i < terms.size(); i++) {
+            Term currTerm = terms.get(i);
+            double coef = currTerm.getCoefficient();
+            int deg = currTerm.getDegree();
+
+            if (coef == 0) continue;
+
+            // Determine the sign
+            if (s.length() > 0) {
+                s.append(coef > 0 ? " + " : " - ");
             } else {
-                s = s + " -";
+                if (coef < 0) s.append("-");
             }
 
-            if (currTerm.getCoefficient() != 1 || currTerm.getDegree() == 0) {
-                s = s+" "+ Math.abs(currTerm.getCoefficient());
+            // Get the absolute value for display
+            double absCoef = Math.abs(coef);
+
+            // Display coefficient
+            if (!(absCoef == 1 && deg != 0)) {
+                s.append(absCoef);
             }
 
-            switch (currTerm.getDegree()) {
-                case 0 :
-                    break;
-                case 1 :
-                    s = s + (terms.get(0)).getLiteral();
-                    break;
-                default :
-                    s = s + (terms.get(0)).getLiteral() +"^" + currTerm.getDegree();
+            // Display variable and degree
+            if (deg > 0) {
+                s.append(currTerm.getLiteral());
+                if (deg > 1) {
+                    s.append("^").append(deg);
+                }
             }
         }
-        return s;
+
+        // If all terms were zero
+        if (s.length() == 0) {
+            return "0";
+        }
+
+        return s.toString();
     }
 
+
     /**
-     * Returns the value of this polynomial if its literal is substituted
-     * by the specified given value.
+     * Solves or finds the value of this polynomial for a given number.
+     *
+     * @param value the number that replaces the variable (like x = 2)
+     * @return the final computed value of the polynomial
+     * @throws Exception if the calculation fails
      */
-    public double evaluate(double value) throws Exception{
+    public double evaluate(double value) throws Exception {
         double sum = 0;
 
         for (int ctr = 0; ctr < terms.size(); ctr++) {
@@ -112,84 +127,71 @@ public class Polynomial {
     }
 
     /**
-     * Sets this polynomial to a given LinkedList of Term
+     * Replaces the list of terms in this polynomial with another list.
+     *
+     * @param t the new list of terms to set
      */
-    public void setTerms(LinkedList<Term> t){
+    public void setTerms(LinkedList<Term> t) {
         terms = t;
     }
 
     /**
-     *Returns this polynomial as a LinkedList of Term
+     * Gives the list of terms that make up this polynomial.
+     *
+     * @return the list of terms in this polynomial
      */
     public LinkedList<Term> getTerms() {
         return terms;
     }
 
     /**
-     * public Polynomial add(Polynomial otherPolynomial) throws Exception
-     * Adds otherPolynomial to this polynomial
-     1. Declare (let) result as a Polynomial that will eventually represent the sum polynomial
-     2. Construct a new LinkedList of Term(i.e. resultTerms) that will eventually hold the Terms of the sum Polynomial
-     3. Construct a copy of each term of this (first) Polynomial and add the constructed Term to the constructed LinkedList (resultTerms)
-     4. Let resultTerms be the terms of result(i.e. the sum polynomial)
-     5. For each (get each) term of the other polynomial, construct a copy of the term and assign such copy to sTerm.
-     6. Add sTerm to the sum polynomial (result)
-     7. If result polynomial has no term, let result have the term 0x^0
-     8. return result.
+     * Adds another polynomial to this one and returns the result as a new polynomial.
+     *
+     * @param otherPolynomial the polynomial to add
+     * @return a new polynomial that is the sum of this and the other
+     * @throws Exception
      */
     public Polynomial add(Polynomial otherPolynomial) throws Exception {
         Polynomial result = new Polynomial();
-        LinkedList<Term> resultTerms= new LinkedList<Term>();
+        LinkedList<Term> resultTerms = new LinkedList<Term>();
 
-        // copy terms from this polynomial into resultTerms
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm = this.getTerms().get(ctr);
             resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
         }
 
-        // set the constructed list as the terms of result
         result.setTerms(resultTerms);
 
-        // add each term of otherPolynomial (using addTerm to combine like degrees)
         for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
             Term currentTerm = otherPolynomial.getTerms().get(ctr2);
             Term sTerm = new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree());
             result.addTerm(sTerm);
         }
 
-        if (result.getTerms().size()==0) {
+        if (result.getTerms().size() == 0) {
             result.addTerm(new Term(0, 'x', 0));
         }
         return result;
     }
 
     /**
-     * Subtracts otherPolynomial from this polynomial
+     * Subtracts another polynomial from this one and returns the result as a new polynomial.
      *
-     1. Declare (let) result as a Polynomial that will eventually represent the difference polynomial
-     2. Construct a new LinkedList of Term(i.e. resultTerms) that will eventually hold the Terms of the difference Polynomial
-     3. Construct a copy of each term of this (first) Polynomial and put the constructed Term to the constructed LinkedList (resultTerms)
-     4. Let resultTerms be the terms of result(i.e. the sum polynomial)
-     5. For each (get each) term of the other polynomial, construct a copy of the term and assign such copy to sTerm.
-     6. Multiply the numerical coefficient field of sTerm by -1.
-     7. Add sTerm to the difference polynomial (result)
-     8. If result polynomial has no term, let result have the term 0x^0
-     9. return result.
+     * @param otherPolynomial the polynomial to subtract
+     * @return a new polynomial that is the difference of this and the other
+     * @throws Exception
      */
     public Polynomial subtract(Polynomial otherPolynomial) throws Exception {
         Polynomial result = new Polynomial();
-        LinkedList<Term> resultTerms= new LinkedList<Term>();
+        LinkedList<Term> resultTerms = new LinkedList<Term>();
 
-        // copy terms from this polynomial into resultTerms
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm = this.getTerms().get(ctr);
             resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
         }
 
-        // set copied terms to result
         result.setTerms(resultTerms);
 
-        // for each term in otherPolynomial, negate its coefficient and add to result (which will combine like terms)
         for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
             Term currentTerm = otherPolynomial.getTerms().get(ctr2);
             Term sTerm = new Term(-currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree());
@@ -203,14 +205,15 @@ public class Polynomial {
         return result;
     }
 
-
     /**
-     * Multiplies this polynomial by otherPolynomial.
-     * The method assumes that the polynomials have the same literals, and it follows the prescription of the Term class.
+     * Multiplies this polynomial by another polynomial and returns the result.
+     *
+     * @param otherPolynomial the polynomial to multiply by
+     * @return a new polynomial that is the product of both
+     * @throws Exception
      */
-    public Polynomial multiply(Polynomial otherPolynomial) throws Exception
-    {
-        Polynomial result=new Polynomial();
+    public Polynomial multiply(Polynomial otherPolynomial) throws Exception {
+        Polynomial result = new Polynomial();
 
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm1 = this.getTerms().get(ctr);
@@ -218,34 +221,36 @@ public class Polynomial {
             for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
                 Term currentTerm2 = otherPolynomial.getTerms().get(ctr2);
 
-                double pCoef = currentTerm2.getCoefficient()*currentTerm1.getCoefficient();
-                int pDegree = currentTerm2.getDegree()+currentTerm1.getDegree();
+                double pCoef = currentTerm2.getCoefficient() * currentTerm1.getCoefficient();
+                int pDegree = currentTerm2.getDegree() + currentTerm1.getDegree();
 
-                // add product term to result; addTerm will combine like degrees
                 result.addTerm(new Term(pCoef, currentTerm1.getLiteral(), pDegree));
+            }
+        }
 
-            } // end of second for ( for ctr2)
-        } // end of first for (for ctr)
         if (result.getTerms().size() == 0)
-            result.addTerm(new Term(0,'x',0));
+            result.addTerm(new Term(0, 'x', 0));
+
         return result;
     }
 
     /**
-     * Divides this polynomial by divisor polynomial
+     * Divides this polynomial by another polynomial.
+     * Returns both the quotient and remainder in a Quotient object.
+     *
+     * @param divisor the polynomial to divide by
+     * @return a Quotient object containing the quotient and remainder
+     * @throws Exception
      */
-    public Quotient divide(Polynomial divisor) throws Exception
-    {
-
-        Quotient result=new Quotient();
-        Polynomial quotient= new Polynomial();
+    public Quotient divide(Polynomial divisor) throws Exception {
+        Quotient result = new Quotient();
+        Polynomial quotient = new Polynomial();
         Polynomial remainder = new Polynomial();
 
         LinkedList<Term> dividend = new LinkedList<Term>();
         Term qTerm;
         Polynomial subtrahend = new Polynomial();
 
-        // copy dividend (this) terms to a separate list that will be manipulated as remainder
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm = this.getTerms().get(ctr);
             dividend.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
@@ -253,13 +258,12 @@ public class Polynomial {
 
         remainder.setTerms(dividend);
 
-        // Division algorithm: while degree(remainder) >= degree(divisor)
-        while (((remainder != null)) && (remainder.getTerms().size() > 0) && ((remainder.getTerms().get(0)).getDegree() >= (divisor.getTerms().get(0)).getDegree())) {
+        while ((remainder != null) && (remainder.getTerms().size() > 0) && ((remainder.getTerms().get(0)).getDegree() >= (divisor.getTerms().get(0)).getDegree())) {
 
             Term numTerm = remainder.getTerms().get(0);
             Term divTerm = divisor.getTerms().get(0);
 
-            qTerm = new Term (numTerm.getCoefficient()/divTerm.getCoefficient(), numTerm.getLiteral(), numTerm.getDegree()-divTerm.getDegree());
+            qTerm = new Term(numTerm.getCoefficient() / divTerm.getCoefficient(), numTerm.getLiteral(), numTerm.getDegree() - divTerm.getDegree());
 
             quotient.addTerm(qTerm);
 
@@ -273,12 +277,12 @@ public class Polynomial {
             remainder = remainder.subtract(subtrahend);
         }
 
-        if (quotient.getTerms().size()==0) {
+        if (quotient.getTerms().size() == 0) {
             quotient.addTerm(new Term(0, 'x', 0));
         }
         result.setQuotientP(quotient);
 
-        if (remainder.getTerms().size()==0) {
+        if (remainder.getTerms().size() == 0) {
             remainder.addTerm(new Term(0, 'x', 0));
         }
 
