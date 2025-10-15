@@ -1,6 +1,6 @@
 /*
 Name of Student: Mina, Ezekiel Cole U.
-Date:
+Due Date: 15 October 2025
 */
 
 import java.util.LinkedList; // access the LinkedList class from package util
@@ -141,17 +141,20 @@ public class Polynomial {
         Polynomial result = new Polynomial();
         LinkedList<Term> resultTerms= new LinkedList<Term>();
 
+        // copy terms from this polynomial into resultTerms
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm = this.getTerms().get(ctr);
             resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
         }
 
-        // TODO Put missing statement here
+        // set the constructed list as the terms of result
+        result.setTerms(resultTerms);
 
+        // add each term of otherPolynomial (using addTerm to combine like degrees)
         for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
             Term currentTerm = otherPolynomial.getTerms().get(ctr2);
             Term sTerm = new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree());
-            result.addTerm( sTerm);
+            result.addTerm(sTerm);
         }
 
         if (result.getTerms().size()==0) {
@@ -177,7 +180,25 @@ public class Polynomial {
         Polynomial result = new Polynomial();
         LinkedList<Term> resultTerms= new LinkedList<Term>();
 
-        // TODO
+        // copy terms from this polynomial into resultTerms
+        for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
+            Term currentTerm = this.getTerms().get(ctr);
+            resultTerms.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
+        }
+
+        // set copied terms to result
+        result.setTerms(resultTerms);
+
+        // for each term in otherPolynomial, negate its coefficient and add to result (which will combine like terms)
+        for (int ctr2 = 0; ctr2 < otherPolynomial.getTerms().size(); ctr2++) {
+            Term currentTerm = otherPolynomial.getTerms().get(ctr2);
+            Term sTerm = new Term(-currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree());
+            result.addTerm(sTerm);
+        }
+
+        if (result.getTerms().size() == 0) {
+            result.addTerm(new Term(0, 'x', 0));
+        }
 
         return result;
     }
@@ -200,11 +221,8 @@ public class Polynomial {
                 double pCoef = currentTerm2.getCoefficient()*currentTerm1.getCoefficient();
                 int pDegree = currentTerm2.getDegree()+currentTerm1.getDegree();
 
+                // add product term to result; addTerm will combine like degrees
                 result.addTerm(new Term(pCoef, currentTerm1.getLiteral(), pDegree));
-
-
-                // TODO Invoke appropriate method to add a term to product polynomial
-
 
             } // end of second for ( for ctr2)
         } // end of first for (for ctr)
@@ -227,6 +245,7 @@ public class Polynomial {
         Term qTerm;
         Polynomial subtrahend = new Polynomial();
 
+        // copy dividend (this) terms to a separate list that will be manipulated as remainder
         for (int ctr = 0; ctr < this.getTerms().size(); ctr++) {
             Term currentTerm = this.getTerms().get(ctr);
             dividend.add(new Term(currentTerm.getCoefficient(), currentTerm.getLiteral(), currentTerm.getDegree()));
@@ -234,7 +253,8 @@ public class Polynomial {
 
         remainder.setTerms(dividend);
 
-        while (((remainder != null)) && ((remainder.getTerms().get(0)).getDegree() >= (divisor.getTerms().get(0)).getDegree())) {
+        // Division algorithm: while degree(remainder) >= degree(divisor)
+        while (((remainder != null)) && (remainder.getTerms().size() > 0) && ((remainder.getTerms().get(0)).getDegree() >= (divisor.getTerms().get(0)).getDegree())) {
 
             Term numTerm = remainder.getTerms().get(0);
             Term divTerm = divisor.getTerms().get(0);
@@ -262,7 +282,7 @@ public class Polynomial {
             remainder.addTerm(new Term(0, 'x', 0));
         }
 
-        result.setRemainderP(remainder); // TODO Invoke appropriate method to set remainder member of quotient
+        result.setRemainderP(remainder);
 
         return result;
     }

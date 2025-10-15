@@ -1,3 +1,8 @@
+/*
+Name of Student: Mina, Ezekiel Cole U.
+Due Date: 15 October 2025
+*/
+
 public class Quotient {
 
     Polynomial quotientP;
